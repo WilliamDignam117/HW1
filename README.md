@@ -33,6 +33,7 @@ This notebook was written using Julia 1.11.5, and depends on the following packa
 - `Plots.jl` (basic plotting library)
 - `GraphRecipes.jl` (make graphical plots for Problem 4)
 - `LaTeXStrings.jl` (use LaTeX for mathematical markdown in Plots)
+- `Distributions.jl` (interface for working with probability distributions)
 
 ## Prerequisites
 
