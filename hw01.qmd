@@ -158,7 +158,7 @@ win_prob = sum(outcomes) / n_trials # compute average number of wins
 
 What does this `MethodError` mean? Why does this code produce one? Fix the error and solve the problem.
 
-### Problem 1.4
+#### Problem 1.4
 
 You're interested in writing some code to remove the mean of a vector from all of its components. You've written the following code and tried to test it on a random vector, but your code returns a `MethodError`.
 
