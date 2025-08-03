@@ -20,6 +20,8 @@ format:
 execute: 
     echo: true
 engine: julia
+julia:
+  exeflags: ["+1.11.5"]
 format-links: [pdf, ipynb]
 ---
 
@@ -32,7 +34,7 @@ format-links: [pdf, ipynb]
 ::: {.callout-important icon=false}
 ### Due Date
 
-Thursday, 9/5/24, 9:00pm
+Thursday, 9/5/25, 9:00pm
 :::
 
 ::: {.content-visible when-format="html"}
@@ -52,10 +54,9 @@ Otherwise, you can [find the Github repository here]({{< var github_org.repo >}}
 ### Instructions
 
 - Problem 1 consist of a series of code snippets for you to interpret and debug. You will be asked to identify relevant error(s) and fix the code. 
-- Problem 2 gives you some code that works as intended; your goal is to identify the code's purpose by following its logic.
-- Problem 3 asks you to write code to generate a random vector and subtract off its mean, using a Julia syntax called broadcasting.
-- Problem 4 asks you to convert a verbal description of a wastewater treatment system into a Julia function, and then to use that function to explore the impact of different wastewater allocation strategies.
-- Problem 5 (5750 only) asks you to use more advanced Julia techniques.
+- Problem 2 asks you to write code to implement several simple functions using more general programming and some which are unique to Julia (which might mean that you need to look at the documentation or use Julia's help function, which is accessed with `?`, e.g. `?sum` for help with the `sum()` function) or to analyze Julia syntax.
+- Problem 3 asks you to convert a verbal description of a wastewater treatment system into a Julia function, and then to use that function to explore the impact of different wastewater allocation strategies.
+
 
 ### Load Environment
 
@@ -75,6 +76,7 @@ using Random
 using Plots
 using GraphRecipes
 using LaTeXStrings
+using Distributions
 ```
 
 ```{julia}
@@ -82,17 +84,11 @@ using LaTeXStrings
 Random.seed!(1)
 ```
 
-## Problems (Total: 50/60 Points)
+## Problems (Total: 30 Points)
 
-### Problem 1 (15 points)
+### Problem 1 (12 points)
 
-The following subproblems all involve code snippets that require debugging. 
-
-**For each of them**:
-
-* identify and describe the logic and/or syntax error;
-* write a fixed version of the function;
-* use your fixed function to solve the problem.
+The following subproblems all involve code snippets that require debugging. You are encouraged to use online resources (*e.g.* Julia documentation and forums, Stack Overflow, Reddit, etc) to help find diagnose error messages and find solutions, but make sure that you clearly document which resources you used and how you used them.
 
 #### Problem 1.1
 
@@ -100,12 +96,15 @@ You've been tasked with writing code to identify the minimum value in an array. 
 
 ```{julia}
 function minimum(array)
+    # initialize the minimum value counter
     min_value = 0
+    # update minimum values
     for i in 1:length(array)
         if array[i] < min_value
             min_value = array[i]
         end
     end
+    # return found minimum
     return min_value
 end
 
@@ -113,13 +112,16 @@ array_values = [89, 90, 95, 100, 100, 78, 99, 98, 100, 95]
 @show minimum(array_values);
 ```
 
+What is the logical flaw in the code? Fix it and show that your fixed code solves the problem.
 
 #### Problem 1.2
 
-Your team is trying to compute the average grade for your class, but the following code produces an error.
+Your team is trying to compute the average grade for your class, but the following code produces an `UndefVarError`.
 
 ```{julia}
+# enter student grade vector
 student_grades = [89, 90, 95, 100, 100, 78, 99, 98, 100, 95]
+# compute class average
 function class_average(grades)
   average_grade = mean(student_grades)
   return average_grade
@@ -128,19 +130,24 @@ end
 @show average_grade;
 ```
 
-#### Problem 1.3 
+What does this `UndefVarError` mean? Why does this code produce one? Fix the error and solve the problem.
 
-Your team wants to know the expected payout of an old Italian dice game called *passadieci* (which was analyzed by Galileo as one of the first examples of a rigorous study of probability). The goal of passadieci is to get at least an 11 from rolling three fair, six-sided dice. Your strategy is to compute the average wins from 1,000 trials, but the code you've written below produces an error.
+#### Problem 1.3
+
+Your team wants to know the expected payout of an old Italian dice game called *passadieci* (which was analyzed by Galileo as one of the first examples of a rigorous study of probability). The goal of passadieci is to get at least an 11 from rolling three fair, six-sided dice. Your strategy is to compute the average wins from 1,000 trials, but the code you've written below produces a `MethodError`.
 
 
 ```{julia}
+# function to simulate a passadieci roll: 3 6-sided dice
 function passadieci()
     # this rand() call samples 3 values from the vector [1, 6]
     roll = rand(1:6, 3) 
     return roll
 end
+# set number of trials and initialize outcome vector
 n_trials = 1_000
 outcomes = zero(n_trials)
+# simulate number of passadieci rolls and count wins
 for i = 1:n_trials
     outcomes[i] = (sum(passadieci()) > 11)
 end
@@ -148,44 +155,38 @@ win_prob = sum(outcomes) / n_trials # compute average number of wins
 @show win_prob;
 ```
 
-### Problem 2 (5 points)
+What does this `MethodError` mean? Why does this code produce one? Fix the error and solve the problem.
 
-You've been handed some code to analyze. The original coder was not very considerate of other potential users: the function is called `mystery_function` and there are no comments explaining the purpose of the code. It appears to take in an array and return some numbers, and you've been assured that the code works as intended.
+### Problem 1.4
+
+You're interested in writing some code to remove the mean of a vector from all of its components. You've written the following code and tried to test it on a random vector, but your code returns a `MethodError`.
 
 ```{julia}
-function mystery_function(values)
-    y = []
-    for v in values
-        if !(v in y)
-            append!(y, v)
+# function to remove mean from a vector
+function remove_mean(vect)
+    # fucntion to compute the mean
+    function compute_mean(vect)
+        element_sum = 0 # initialize sum
+        # compute mean and return
+        for v in vect
+            element_sum += v
         end
+        return element_sum / length(vect)
     end
-    return y
+
+    m = compute_mean(vect) # compute mean
+    # return demeaned vector
+    return vect - m
 end
 
-list_of_values = [1, 2, 3, 4, 3, 4, 2, 1]
-@show mystery_function(list_of_values);
+random_vect = rand(1_000)
+@show remove_mean(random_vect)
 ```
 
-
-**In this problem**:
-
-* Explain the purpose of `mystery_function`.
-* Add comments to the code, explaining why and how it works. Refer to ["Best Practices for Writing Code Comments"](https://stackoverflow.blog/2021/12/23/best-practices-for-writing-code-comments/), and remember that bad comments can be just as bad as no comments at all. You do not need to add comments to every line (in fact, this is very bad practice), but you should note the *purpose* of every "section" of code, and add comments explaining any code sequences that you don't immediately understand.
-* Is there a built-in Julia function that does the same thing as `mystery_function`? If so, what is it? Use it to do the same thing as the code above.
-
-### Problem 3 (10 points)
-
-You're interested in writing some code to remove the mean of a vector. 
-
-**In this problem**:
-
-* Write a function `compute_mean(v)` which sums all of the elements of a vector `v` using a `for` loop and computes the mean. 
-* Make a random vector `random_vect` of length 10 using Julia's `rand()` function. Use your `compute_mean()` function to calculate its mean and subtract it from `random_vect` **without a loop** (using a Julia technique called *broadcasting*; feel free to consult the Julia documentation and search as necessary). Check that the new vector has mean zero.
+What does this `MethodError` mean? Why does this code produce one? Fix the error and solve the problem.
 
 
-
-### Problem 4 (20 points)
+### Problem 2 (18 points)
 
 Cheap Plastic Products, Inc. is operating a plant that produces $100 \text{m}^3\text{/day}$ of wastewater that is discharged into Pristine Brook. The wastewater contains $1 \text{kg/m}^3$ of YUK, a toxic substance. The US Environmental Protection Agency has imposed an effluent standard on the plant prohibiting discharge of more than $20 \text{kg/day}$ of YUK into Pristine Brook.
 
@@ -218,19 +219,22 @@ p = graphplot(A, names=names,edgelabel=edge_labels, markersize=0.15, markershape
 display(p)
 ```
 
-**In this problem**:
+#### Problem 2.1
 
-* Formulate a mathematical model for the treatment cost and the amount of YUK that will be discharged into Pristine Brook based on the wastewater allocations. This is best done with some equations and supporting text explaining the derivation. Make sure you include, as additional equations in the model, any needed constraints on relevant values. You can find some basics on writing mathematical equations using the LaTeX typesetting syntax [here](https://viveks.me/environmental-systems-analysis/tutorials/latex-notebook.qmd), and a cheatsheet with LaTeX commands can be found on the course website's [Resources page](https://viveks.me/environmental-systems-analysis/resources/markdown.qmd).
-* Implement your systems model as a Julia function which computes the resulting YUK concentration and cost for a particular treatment plan. You can return multiple values from a function with a [tuple](https://docs.julialang.org/en/v1/manual/functions/#Tuples-1), as in:
-  ```{julia}
-  function multiple_return_values(x, y)
-      return (x+y, x*y)
-  end
+Formulate a mathematical model for the treatment cost and the amount of YUK that will be discharged into Pristine Brook based on the wastewater allocations. This is best done with some equations and supporting text explaining the derivation. Make sure you include, as additional equations in the model, any needed constraints on relevant values. You can find some basics on writing mathematical equations using the LaTeX typesetting syntax [here](https://viveks.me/environmental-systems-analysis/tutorials/latex-notebook.qmd), and a cheatsheet with LaTeX commands can be found on the course website's [Resources page](https://viveks.me/environmental-systems-analysis/resources/markdown.qmd).
 
-  a, b = multiple_return_values(2, 5)
-  @show a;
-  @show b;
-  ```
+#### Problem 2.2 
+
+Implement your systems model as a Julia function which computes the resulting YUK concentration and cost for a particular treatment plan. You can return multiple values from a function with a [tuple](https://docs.julialang.org/en/v1/manual/functions/#Tuples-1), as in:
+```{julia}
+function multiple_return_values(x, y)
+    return (x+y, x*y)
+end
+
+a, b = multiple_return_values(2, 5)
+@show a;
+@show b;
+```
 
   To evalute the function over vectors of inputs, you can *broadcast* the function by adding a decimal `.` before the function arguments and accessing the resulting values by writing a *comprehension* to loop over the individual outputs in the vector:
   ```{julia}
@@ -244,37 +248,16 @@ display(p)
   @show b;
   ```
   Make sure you comment your code appropriately to make it clear what is going on and why.
-* Use your function to experiment with some different combinations of wastewater discharge and treatment and plot the results of these experiments. Can you find one that satisfies the YUK effluent standard (plot this as well as a dashed red line)? What was the cost? What can you say about the tradeoff between treatment cost and YUK concentration? You don't have to find an "optimal" solution to this problem, but what do you think would be needed to find a better solution? 
 
-### Problem 5 (10 points)
+#### Problem 2.3
 
-**This problem is only required for students in BEE 5750**.
+Use your function to experiment with 1,000 different combinations of wastewater discharge and treatment. You can do this with either a grid search or by sampling from a [Dirichlet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) (a $\text{Dirichlet}(1, n)$ distribution will generate uniformly-weighted $n$-dimensional vectors whose components add up to 1; see the [`Distributions.jl` documentation](https://juliastats.org/Distributions.jl/stable/starting/) for how to sample from probability distributions in Julia). Plot the results of these experiments. Do any satisfy the YUK effluent standard (plot this as well as a dashed red line). What was the cost of solutions satisfying the standard? What can you say about the tradeoff between treatment cost and YUK concentration? You don't have to find an "optimal" solution to this problem, but what do you think would be needed to find a better solution? 
 
-::: {.cell .markdown}
+#### Problem 2.4
 
-#### Problem 5.1
+Find the strategies which minimize cost and YUK concentration (these will be different strategies) analytically and find the values of the objective metrics. Plot these values in the plot that you created for Problem 3.3. How do their values compare to the spread of values that you found in that problem? Would you select either of them (explain why or why not)?
 
-Using a [comprehension](https://viveks.me/environmental-systems-analysis/tutorials/julia-basics.html#comprehensions), count the number of odd numbers between 0 and 149.
 
-:::
-
-::: {.callout-tip}
-## Hint
-
-`iseven()` returns `true` for even numbers and `false` for odd numbers.
-:::
-
-::: {.cell .markdown}
-#### Problem 5.2
-
-Write a function `polynomial(x, a)` which calculates the polynomial
-$$p(x) = \sum_{i=1}^n a_i x^i$$ 
-
-based on a point `x` and a coefficient vector `a` of length `n` using a loop. Test your function by computing $$p(x) = 2x^3 - x^2 + 1$$ at $x=2$.
-:::
-
-::: {.cell .markdown}
 ## References
 
 List any external references consulted, including classmates.
-:::
