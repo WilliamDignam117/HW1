@@ -226,7 +226,7 @@ Formulate a mathematical model for the treatment cost and the amount of YUK that
 
 #### Problem 2.2 
 
-Implement your systems model as a Julia function which computes the resulting YUK concentration and cost for a particular treatment plan. You can return multiple values from a function with a [tuple](https://docs.julialang.org/en/v1/manual/functions/#Tuples-1), as in:
+Implement your systems model as a Julia function which computes the resulting YUK discharge and cost for a particular treatment plan. You can return multiple values from a function with a [tuple](https://docs.julialang.org/en/v1/manual/functions/#Tuples-1), as in:
 ```{julia}
 function multiple_return_values(x, y)
     return (x+y, x*y)
@@ -252,11 +252,11 @@ a, b = multiple_return_values(2, 5)
 
 #### Problem 2.3
 
-Use your function to experiment with 1,000 different combinations of wastewater discharge and treatment. You can do this with either a grid search or by sampling from a [Dirichlet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) (a $\text{Dirichlet}(1, n)$ distribution will generate uniformly-weighted $n$-dimensional vectors whose components add up to 1; see the [`Distributions.jl` documentation](https://juliastats.org/Distributions.jl/stable/starting/) for how to sample from probability distributions in Julia). Plot the results of these experiments. Do any satisfy the YUK effluent standard (plot this as well as a dashed red line). What was the cost of solutions satisfying the standard? What can you say about the tradeoff between treatment cost and YUK concentration? You don't have to find an "optimal" solution to this problem, but what do you think would be needed to find a better solution? 
+Use your function to experiment with 1,000 different combinations of wastewater discharge and treatment. You can do this with either a grid search or by sampling from a [Dirichlet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) (a $\text{Dirichlet}(1, n)$ distribution will generate uniformly-weighted $n$-dimensional vectors whose components add up to 1; see the [`Distributions.jl` documentation](https://juliastats.org/Distributions.jl/stable/starting/) for how to sample from probability distributions in Julia). Plot the results of these experiments. Do any satisfy the YUK effluent standard (plot this as well as a dashed red line). What was the cost of solutions satisfying the standard? What can you say about the tradeoff between treatment cost and YUK discharge? You don't have to find an "optimal" solution to this problem, but what do you think would be needed to find a better solution? 
 
 #### Problem 2.4
 
-Find the strategies which minimize cost and YUK concentration (these will be different strategies) analytically and find the values of the objective metrics. Plot these values in the plot that you created for Problem 3.3. How do their values compare to the spread of values that you found in that problem? Would you select either of them (explain why or why not)?
+Find the strategies which minimize cost and YUK discharge (these will be different strategies) analytically and find the values of the objective metrics. Plot these values in the plot that you created for Problem 2.3. How do their values compare to the spread of values that you found in that problem? Would you select either of them (explain why or why not)?
 
 
 ## References
