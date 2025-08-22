@@ -1,9 +1,7 @@
 name: Render PDF
 on:
   push:
-    branches:
-      - Fall25
-      - main
+    paths: '**.ipynb'
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
