@@ -25,6 +25,7 @@ The repository consists of the following files:
 - `LICENSE`: This material is licensed using the MIT license. You can ignore this for working on the problem set.
 - `README.md`: This file. You shouldn't need to touch this.
 - `.gitignore`: This tells `git` what files to ignore. You shouldn't need to touch this.
+- `.github/`: This folder contains a GitHub Action workflow to automatically render a committed and pushed notebook to a PDF. You don't need to touch this.
 
 ## Dependencies
 
