@@ -32,7 +32,7 @@ jobs:
       - name: Convert notebooks to PDF
         run: |
           for file in *.ipynb; do
-            quarto render "$file" --to pdf
+            quarto render "$file" --to typst
           done
 
       - name: Commit
