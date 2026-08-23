@@ -111,11 +111,11 @@ CRUD decays in the river with a first order reaction rate $k=0.45 \text{d}^{-1}$
 
 Environmental authorities have taken samples downriver of the three factories and found that the CRUD concentration exceeds the regulatory limit of 1 mg/L.  CRUD can be removed at the source discharge at a cost of $50E^2$ per $1000 \text{m}^3$ treated, where $E$ is the efficiency of removal (the fraction of CRUD removed).
 
-#### Problem 2.1 (2)
+#### Problem 1.1 (2)
 
 Draw a diagram of the river and factory system. Include definitions for any notation you will use.
 
-#### Problem 2.2 (5)
+#### Problem 1.2 (5)
 
 Write down a set of conditions on the removal efficiencies $E_1$, $E_2$, and $E_3$ (where the subscript corresponds to the factory where the effluent is being treated) to guarantee compliance.
 
@@ -264,7 +264,7 @@ display(p)
 
 
 
-#### Problem 4.1 (2)
+#### Problem 5.1 (2)
 
 Make a figure showing notation for how YUK moves through the system for a given treatment allocation. Make sure to define your variables. You can make this by modifying the graph above or with an independent figure included in your solution.
 
@@ -274,7 +274,7 @@ You can modify the edge labels (by editing the `edge_labels` dictionary in the c
 :::
 
 
-#### Problem 4.2 (4)
+#### Problem 5.2 (4)
 
 Formulate a mathematical model for the treatment cost and the amount of YUK that will be discharged into Pristine Brook based on the wastewater allocations. This is best done with some equations and supporting text explaining the derivation. Make sure you include, as additional equations in the model, any needed constraints on relevant values. 
 
@@ -282,7 +282,7 @@ Formulate a mathematical model for the treatment cost and the amount of YUK that
 You can find some basics on writing mathematical equations using the LaTeX typesetting syntax [here](https://viveks.me/environmental-systems-analysis/tutorials/latex-notebook.qmd), and a cheatsheet with LaTeX commands can be found on the course website's [Resources page](https://viveks.me/environmental-systems-analysis/resources/markdown.qmd).
 :::
 
-#### Problem 4.3 (3) 
+#### Problem 5.3 (3) 
 
 Implement your systems model as a Julia function which computes the resulting YUK discharge and cost for a particular treatment plan. You can return multiple values from a function with a [tuple](https://docs.julialang.org/en/v1/manual/functions/#Tuples-1), as in:
 ```{julia}
@@ -313,15 +313,15 @@ Use your function to experiment with 1,000 different combinations of wastewater 
 
 Plot the results of these experiments by making a scatterplot of YUK discharge into the lake vs. treatment cost. Make sure to label your axes and include a legend, as well as a caption clearly describing the plot.
 
-#### Problem 4.4 (3)
+#### Problem 5.4 (3)
 
 Do any satisfy the YUK effluent standard (plot this as well as a dashed red line). What was the cost of solutions satisfying the standard? 
 
-#### Problem 4.5 (4)
+#### Problem 5.5 (4)
 
 What can you say about the tradeoff between treatment cost and YUK discharge? You don't have to find an "optimal" solution to this problem, but what do you think would be needed to find a better solution? 
 
-#### Problem 4.6 (4)
+#### Problem 5.6 (4)
 
 Find the strategies which minimize cost and YUK discharge (these will be different strategies) analytically and find the values of the objective metrics. Plot these values in the plot that you created for Problem 4.3. How do their values compare to the spread of values that you found in that problem? 
 
