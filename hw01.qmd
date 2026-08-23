@@ -19,9 +19,7 @@ format:
         warning: true
         error: true
         toc: false
-        date: ""
-        include-in-header: 
-           - "../../_assets/typst-pdf/include-in-header.typ"
+        date: "08/24/2025"
 execute: 
     echo: true
     eval: true
@@ -46,7 +44,7 @@ format-links:
 ::: {.callout-important icon=false}
 ### Due Date
 
-Thursday, 9/11/25, 9:00pm
+Thursday, 9/03/26, 9:00pm
 :::
 
 ::: {.content-visible when-format="html"}
@@ -63,13 +61,6 @@ Otherwise, you can [find the Github repository here]({{< var github_org.repo >}}
 
 ## Overview
 
-### Instructions
-
-- Problem 1 consist of a series of code snippets for you to interpret and debug. You will be asked to identify relevant error(s) and fix the code. 
-- Problem 2 asks you to write code to implement several simple functions using more general programming and some which are unique to Julia (which might mean that you need to look at the documentation or use Julia's help function, which is accessed with `?`, e.g. `?sum` for help with the `sum()` function) or to analyze Julia syntax.
-- Problem 3 asks you to convert a verbal description of a wastewater treatment system into a Julia function, and then to use that function to explore the impact of different wastewater allocation strategies.
-
-
 ### Load Environment
 
 The following code loads the environment and makes sure all needed packages are installed. This should be at the start of most Julia scripts.
@@ -84,25 +75,68 @@ Pkg.instantiate()
 Standard Julia practice is to load all needed packages at the top of a file. If you need to load any additional packages in any assignments beyond those which are loaded by default, feel free to add a `using` statement, though [you may need to install the package](https://viveks.me/environmental-systems-analysis/tutorials/julia-basics.html#package-management).
 
 ```{julia}
-using Random
-using Plots
-using GraphRecipes
-using LaTeXStrings
-using Distributions
+#| output: false
+
+using Random # allows for random seed generation
+using Plots # basic plotting: can also install and use other packages
+using Graphs # for making graphs and networks
+using GraphRecipes # basic graph generation
+using LaTeXStrings # allows for LaTeX formatting in plots
+using Distributions # sampling and fitting of probability distributions
+using CSV # file I/O for CSV files
+using DataFrames # data structure for tabular data
 ```
 
 ```{julia}
+#| output: false
+
 # this sets a random seed, which ensures reproducibility of random number generation. You should always set a seed when working with random numbers.
 Random.seed!(1)
 ```
 
-## Problems (Total: 30 Points)
+## Problems (Total: 50 Points)
 
-### Problem 1 (12 points)
+
+### Problem 1 (10)
+
+***Systems Modeling***:
+
+Three factories are discharging a chemical called Chlororadiated Ureadicarboxyl (or CRUD) into the Riley River. The river inflow has a volume of 500,000 m$^3$/d and a CRUD concentration of 0.2 mg/L. The river velocity is 25 km/d.
+
+* Factory 1 discharges $100,000 \text{m}^3$/\text{d} of effluent with a CRUD concentration of 10 mg/L;
+* Factory 2 discharges $60,000 \text{m}^3$/\text{d} of effluent with a CRUD concentration of 20 mg/L;
+* Factory 3 discharges $200,000 \text{m}^3$/\text{d} of effluent with a CRUD concentration of 8 mg/L.
+
+CRUD decays in the river with a first order reaction rate $k=0.45 \text{d}^{-1}$. 
+
+Environmental authorities have taken samples downriver of the three factories and found that the CRUD concentration exceeds the regulatory limit of 1 mg/L.  CRUD can be removed at the source discharge at a cost of $50E^2$ per $1000 \text{m}^3$ treated, where $E$ is the efficiency of removal (the fraction of CRUD removed).
+
+#### Problem 2.1 (2)
+
+Draw a diagram of the river and factory system. Include definitions for any notation you will use.
+
+#### Problem 2.2 (5)
+
+Write down a set of conditions on the removal efficiencies $E_1$, $E_2$, and $E_3$ (where the subscript corresponds to the factory where the effluent is being treated) to guarantee compliance.
+
+#### Problem 2.3 (3)
+
+Without finding an "optimal" solution, reason about which factories ought to treat their effluent at a higher level than the others. This can draw on considerations such as cost, the sequencing of discharges, and the amount of CRUD discharged by each factory, or others.
+
+### Problem 2 (6)
+
+***Systems Perturbations***:
+
+Consider the perturbed phosphorous cycle example from Lecture 2. Now suppose that the initial perturbation at $t=0$ is a 10% reduction in the rate constant for the conversion of phosphorous from organic to inorganic form (through an inhibition of phosphatase activity due to e.g. acidic rain fall). When the new steady state is reached, how much phosphorous will be in each compartment?
+
+
+### Problem 3 (9)
+
+***Debugging Code***: 
 
 The following subproblems all involve code snippets that require debugging. You are encouraged to use online resources (*e.g.* Julia documentation and forums, Stack Overflow, Reddit, etc) to help find diagnose error messages and find solutions, but make sure that you clearly document which resources you used and how you used them.
 
-#### Problem 1.1
+#### Problem 3.1 (3)
 
 You've been tasked with writing code to identify the minimum value in an array. You cannot use a predefined function. Your colleague suggested the function below, but it does not return the minimum value.
 
@@ -124,27 +158,9 @@ array_values = [89, 90, 95, 100, 100, 78, 99, 98, 100, 95]
 @show minimum(array_values);
 ```
 
-What is the logical flaw in the code? Fix it and show that your fixed code solves the problem.
+What is the logical flaw in the code? Fix it (describe what you changed rather than reproducing the entire code snippet) and show that your fixed code solves the problem.
 
-#### Problem 1.2
-
-Your team is trying to compute the average grade for your class, but the following code produces an `UndefVarError`.
-
-```{julia}
-# enter student grade vector
-student_grades = [89, 90, 95, 100, 100, 78, 99, 98, 100, 95]
-# compute class average
-function class_average(grades)
-  average_grade = mean(student_grades)
-  return average_grade
-end
-
-@show average_grade;
-```
-
-What does this `UndefVarError` mean? Why does this code produce one? Fix the error and solve the problem.
-
-#### Problem 1.3
+#### Problem 3.2 (3)
 
 Your team wants to know the expected payout of an old Italian dice game called *passadieci* (which was analyzed by Galileo as one of the first examples of a rigorous study of probability). The goal of passadieci is to get at least an 11 from rolling three fair, six-sided dice. Your strategy is to compute the average wins from 1,000 trials, but the code you've written below produces a `MethodError`.
 
@@ -167,9 +183,9 @@ win_prob = sum(outcomes) / n_trials # compute average number of wins
 @show win_prob;
 ```
 
-What does this `MethodError` mean? Why does this code produce one? Fix the error and solve the problem.
+What does this `MethodError` mean? Why does this code produce one? Fix the error (describe what you changed rather than reproducing the entire code snippet) and solve the problem.
 
-#### Problem 1.4
+#### Problem 3.3 (3)
 
 You're interested in writing some code to remove the mean of a vector from all of its components. You've written the following code and tried to test it on a random vector, but your code returns a `MethodError`.
 
@@ -195,10 +211,27 @@ random_vect = rand(1_000)
 @show remove_mean(random_vect)
 ```
 
-What does this `MethodError` mean? Why does this code produce one? Fix the error and solve the problem.
+What does this `MethodError` mean? Why does this code produce one? Fix the error (describe what you changed rather than reproducing the entire code snippet) and solve the problem.
+
+### Problem 4 (5)
+
+***Loading and Manipulating Data***
+
+The file `fha.csv` contains data^[From the [2023 Federal Highway Administration's Highway Statistics report](https://www.fhwa.dot.gov/policyinformation/statistics/2023/pdf/hm72.pdf)] on the size of American metro areas and the number of miles people drive in each metro area each day. This problem asks you to load and work with this data to get practice with data manipulation in Julia.
+
+#### Problem 4.1 (2) 
+
+Load `fha.csv` into a Julia `DataFrame`. How many rows and columns does the data have?
 
 
-### Problem 2 (18 points)
+#### Problem 4.2 (3)
+
+Calculate the number of miles driven per person per day for every metro area. Make a scatterplot of this on the $y$-axis and the population of the city on the $x$-axis. Make sure to label your axes and include a caption clearly describing the plot. Highlight where the New York City and Houston metro areas are on the plot and make a legend clearly labelling any plot features.
+
+
+### Problem 5 (20)
+
+***Computational Modeling***:
 
 Cheap Plastic Products, Inc. is operating a plant that produces $100 \text{m}^3\text{/day}$ of wastewater that is discharged into Pristine Brook. The wastewater contains $1 \text{kg/m}^3$ of YUK, a toxic substance. The US Environmental Protection Agency has imposed an effluent standard on the plant prohibiting discharge of more than $20 \text{kg/day}$ of YUK into Pristine Brook.
 
@@ -206,14 +239,12 @@ Cheap Plastic Products has analyzed two methods for reducing its discharges of Y
 
 Method 2 is a chemical treatment procedure which costs \$1.50 per $\text{m}^3$ of wastewater treated. The chemical treatment has an efficiency of $e= 1 - 0.005X_2$, where $X_2$ is the quantity of wastewater ($\text{m}^3\text{/day}$) treated. For example, if $X_2 = 50 \text{m}^3\text{/day}$, then $e = 1 - 0.005(50) = 0.75$, so that 75% of the YUK is removed.
 
-Cheap Plastic Products is wondering how to allocate their wastewater between these three disposal and treatment methods (land disposal, chemical treatment, and direct disposal) to meet the effluent standard while keeping costs manageable.
-
-The flow of wastewater through this treatment system is shown in @fig-wastewater. Modify the edge labels (by editing the `edge_labels` dictionary in the code producing @fig-wastewater) to show how the wastewater allocations result in the final YUK discharge into Pristine Brook. For the `edge_label` dictionary, the tuple $(i, j)$ corresponds to the arrow going from node $i$ to node $j$. The syntax for any entry is `(i, j) => "label text"`, and the label text can include mathematical notation if the string is prefaced with an `L`, as in `L"x_1"` will produce $x_1$.
-
+Cheap Plastic Products is wondering how to allocate their wastewater between these three disposal and treatment methods (land disposal, chemical treatment, and direct disposal) to meet the effluent standard while keeping costs manageable. The flow of wastewater through this treatment system is shown in @fig-wastewater. 
 
 ```{julia}
 #| label: fig-wastewater
 #| fig-cap: "System diagram of the wastewater treatment options in Problem 4."
+#| echo: true
 
 A = [0 1 1 1;
 	0 0 0 1;
@@ -231,11 +262,27 @@ p = graphplot(A, names=names,edgelabel=edge_labels, markersize=0.15, markershape
 display(p)
 ```
 
-#### Problem 2.1
 
-Formulate a mathematical model for the treatment cost and the amount of YUK that will be discharged into Pristine Brook based on the wastewater allocations. This is best done with some equations and supporting text explaining the derivation. Make sure you include, as additional equations in the model, any needed constraints on relevant values. You can find some basics on writing mathematical equations using the LaTeX typesetting syntax [here](https://viveks.me/environmental-systems-analysis/tutorials/latex-notebook.qmd), and a cheatsheet with LaTeX commands can be found on the course website's [Resources page](https://viveks.me/environmental-systems-analysis/resources/markdown.qmd).
 
-#### Problem 2.2 
+#### Problem 4.1 (2)
+
+Make a figure showing notation for how YUK moves through the system for a given treatment allocation. Make sure to define your variables. You can make this by modifying the graph above or with an independent figure included in your solution.
+
+::: {.callout.tip}
+
+You can modify the edge labels (by editing the `edge_labels` dictionary in the code) in @fig-wastewater to show how the wastewater allocations result in the final YUK discharge into Pristine Brook. For the `edge_label` dictionary, the tuple $(i, j)$ corresponds to the arrow going from node $i$ to node $j$. The syntax for any entry is `(i, j) => "label text"`, and the label text can include mathematical notation if the string is prefaced with an `L`, as in `L"x_1"` will produce $x_1$.
+:::
+
+
+#### Problem 4.2 (4)
+
+Formulate a mathematical model for the treatment cost and the amount of YUK that will be discharged into Pristine Brook based on the wastewater allocations. This is best done with some equations and supporting text explaining the derivation. Make sure you include, as additional equations in the model, any needed constraints on relevant values. 
+
+::: {.callout .tip}
+You can find some basics on writing mathematical equations using the LaTeX typesetting syntax [here](https://viveks.me/environmental-systems-analysis/tutorials/latex-notebook.qmd), and a cheatsheet with LaTeX commands can be found on the course website's [Resources page](https://viveks.me/environmental-systems-analysis/resources/markdown.qmd).
+:::
+
+#### Problem 4.3 (3) 
 
 Implement your systems model as a Julia function which computes the resulting YUK discharge and cost for a particular treatment plan. You can return multiple values from a function with a [tuple](https://docs.julialang.org/en/v1/manual/functions/#Tuples-1), as in:
 ```{julia}
@@ -261,13 +308,22 @@ a, b = multiple_return_values(2, 5)
   ```
   Make sure you comment your code appropriately to make it clear what is going on and why.
 
-#### Problem 2.3
 
-Use your function to experiment with 1,000 different combinations of wastewater discharge and treatment. You can do this with either a grid search or by sampling from a [Dirichlet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) (a $\text{Dirichlet}(1, n)$ distribution will generate uniformly-weighted $n$-dimensional vectors whose components add up to 1; see the [`Distributions.jl` documentation](https://juliastats.org/Distributions.jl/stable/starting/) for how to sample from probability distributions in Julia). Plot the results of these experiments. Do any satisfy the YUK effluent standard (plot this as well as a dashed red line). What was the cost of solutions satisfying the standard? What can you say about the tradeoff between treatment cost and YUK discharge? You don't have to find an "optimal" solution to this problem, but what do you think would be needed to find a better solution? 
+Use your function to experiment with 1,000 different combinations of wastewater discharge and treatment. You can do this with either a grid search or by sampling from a [Dirichlet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) (a $\text{Dirichlet}(1, n)$ distribution will generate uniformly-weighted $n$-dimensional vectors whose components add up to 1; see the [`Distributions.jl` documentation](https://juliastats.org/Distributions.jl/stable/starting/) for how to sample from probability distributions in Julia). 
 
-#### Problem 2.4
+Plot the results of these experiments by making a scatterplot of YUK discharge into the lake vs. treatment cost. Make sure to label your axes and include a legend, as well as a caption clearly describing the plot.
 
-Find the strategies which minimize cost and YUK discharge (these will be different strategies) analytically and find the values of the objective metrics. Plot these values in the plot that you created for Problem 2.3. How do their values compare to the spread of values that you found in that problem? Would you select either of them (explain why or why not)?
+#### Problem 4.4 (3)
+
+Do any satisfy the YUK effluent standard (plot this as well as a dashed red line). What was the cost of solutions satisfying the standard? 
+
+#### Problem 4.5 (4)
+
+What can you say about the tradeoff between treatment cost and YUK discharge? You don't have to find an "optimal" solution to this problem, but what do you think would be needed to find a better solution? 
+
+#### Problem 4.6 (4)
+
+Find the strategies which minimize cost and YUK discharge (these will be different strategies) analytically and find the values of the objective metrics. Plot these values in the plot that you created for Problem 4.3. How do their values compare to the spread of values that you found in that problem? 
 
 
 ## References
