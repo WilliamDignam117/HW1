@@ -51,9 +51,7 @@ Thursday, 9/03/26, 9:00pm
 
 :::{.callout-caution}
 
-If you are enrolled in the course, make sure that you use the GitHub Classroom link provided in Ed Discussion, or you may not be able to get help if you run into problems.
-
-Otherwise, you can [find the Github repository here]({{< var github_org.repo >}}/hw01).
+If you are enrolled in the course, make sure that you fork the [assignment repository]({{< var github_org.repo >}}/hw01) (linked in Ed Discussion) to your own GitHub account, or you may not be able to get help if you run into problems.
 
 :::
 
